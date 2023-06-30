@@ -5,10 +5,8 @@ import moment from 'moment'
 const props = defineProps(['selectedDate'])
 
 //Format Date
-const date = ref('selectedDate.value')
-
 const formattedDate = computed(() => {
-    return moment(date).format('MMMM Do, YYYY');
+    return moment(props.selectedDate).format('MMMM Do, YYYY');
 })
 </script>
 
