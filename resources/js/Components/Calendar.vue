@@ -29,8 +29,8 @@ const updateDate = (date) => {
 
 <template>
     <h1>Your Business Here</h1>
+    <p>Select a date and bid on your desired time slot!</p>
     <DatePicker v-model="date" :disabled-dates="disabledDates" :min-date="new Date()" @dayclick="updateDate(date)" />
-    <p>{{date}}</p>
 </template>
 
 <style>
