@@ -3,17 +3,27 @@ import {ref, computed} from 'vue'
 import moment from 'moment'
 
 const props = defineProps(['selectedDate'])
-let timeSlots = ref(['9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm'])
+let rawTimeSlots = ref(['9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm'])
 
 //Format Date
 const formattedDate = computed(() => {
     return moment(props.selectedDate).format('MMMM Do, YYYY')
 })
 
+// Filter the time slots based on their bid end time
+let timeSlots = computed(() => {
+    return rawTimeSlots.value.filter(slot => {
+        // Calculate the bid end time for this slot
+        let slotDateTime = moment(`${formattedDate.value} ${slot}`, 'MMMM Do, YYYY h:mm a');
+        let bidEndTime = slotDateTime.clone().subtract(1, 'hours');
+
+        // Include the slot only if its bid end time is in the future
+        return bidEndTime.isAfter(moment());
+    });
+});
+
 // Time until bid ends
 const timeUntilBidEnds = (slot) => {
-    // Create moment object for the selected date
-    let selectedDateTime = moment(props.selectedDate);
 
     // Create moment object for the slot time on the selected date
     let slotDateTime = moment(`${formattedDate.value} ${slot}`, 'MMMM Do, YYYY h:mm a');
@@ -42,10 +52,10 @@ const timeUntilBidEnds = (slot) => {
             <div
                 v-for="slot in timeSlots"
                 :key="slot"
-                class="border border-gray-300 w-full h-10 flex items-center justify-center rounded-xl"
+                class="border border-gray-300 w-full py-2 flex items-center justify-center rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
             >
                 <h3 class="font-inter">{{ slot }}</h3>
-                <p>{{ timeUntilBidEnds(slot) }}</p>
+                <p>Bidding ends {{ timeUntilBidEnds(slot) }}</p>
             </div>
         </div>
     </div>
