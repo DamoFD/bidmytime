@@ -28,9 +28,21 @@ const updateDate = (date) => {
 </script>
 
 <template>
-    <h1>Your Business Here</h1>
-    <p>Select a date and bid on your desired time slot!</p>
-    <DatePicker v-model="date" :disabled-dates="disabledDates" :min-date="new Date()" @dayclick="updateDate(date)" />
+    <!-- Main Wrapper -->
+    <div class="flex flex-col items-center w-1/2 py-10">
+        <h1 class="text-2xl font-nunito font-black text-gray-800">Your Business Here</h1>
+        <p class="font-inter">Select a date and bid on your desired time slot!</p>
+        <div class="mt-6">
+            <DatePicker
+                v-model="date"
+                :disabled-dates="disabledDates"
+                :min-date="new Date()"
+                @dayclick="updateDate(date)"
+                transparent
+                borderless
+            />
+        </div>
+    </div>
 </template>
 
 <style>
