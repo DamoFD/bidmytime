@@ -32,7 +32,12 @@ const disabledDates = computed(() => {
     ]
 })
 
-console.log(disabledDates.value)
+// find the weekday id
+const findWeekdayIdByDate = (date) => {
+    const dayOfWeek = date.getDay() + 1
+    const weekday = weekdays.value.find(weekday => weekday.day_of_week === dayOfWeek)
+    return weekday ? weekday.id : null
+}
 
 //Emit current date on mount
 onMounted(() => {
@@ -43,7 +48,8 @@ const emit = defineEmits(['update-date'])
 
 //Emit date to parent
 const updateDate = (date) => {
-    emit('update-date', date)
+    const weekdayId = findWeekdayIdByDate(date)
+    emit('update-date', date, weekdayId)
 }
 </script>
 

@@ -2,7 +2,11 @@
 import {ref, computed} from 'vue'
 import moment from 'moment'
 
-const props = defineProps(['selectedDate'])
+const props = defineProps([
+    'selectedDate',
+    'selectedWeekday'
+])
+
 let rawTimeSlots = ref(['9:00 am', '10:00 am', '11:00 am', '12:00 pm', '1:00 pm', '2:00 pm', '3:00 pm', '4:00 pm', '5:00 pm'])
 
 //Format Date
