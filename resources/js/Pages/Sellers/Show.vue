@@ -14,7 +14,6 @@ const props = defineProps({
 })
 
 const weekdays = ref(props.seller.available_weekdays)
-const times = ref(props.seller.availableTimes)
 
 </script>
 
@@ -23,7 +22,7 @@ const times = ref(props.seller.availableTimes)
     <div class="min-h-screen w-full flex items-center justify-center bg-gray-300">
         <div class="flex w-full m-10 bg-white rounded-xl">
             <Calendar @update-date="updateDate" :seller="seller" />
-            <TimeSlots :selected-date="selectedDate" />
+            <TimeSlots :selected-date="selectedDate" :weekdays="weekdays" />
         </div>
     </div>
 </template>
