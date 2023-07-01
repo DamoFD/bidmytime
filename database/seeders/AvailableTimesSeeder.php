@@ -22,7 +22,7 @@ class AvailableTimesSeeder extends Seeder
             \App\Models\AvailableTimes::create([
                 'available_weekdays_id' => $weekday,
                 'start_time' => '13:00:00',
-                'end_time' => '17:00:00',
+                'end_time' => '20:00:00',
                 'timeslot' => 60,
             ]);
         }
