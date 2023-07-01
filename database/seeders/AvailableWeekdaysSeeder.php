@@ -14,7 +14,7 @@ class AvailableWeekdaysSeeder extends Seeder
     {
         foreach (range(2, 6) as $weekday) {
             \App\Models\AvailableWeekdays::create([
-                'seller_id' => 1,
+                'sellers_id' => 1,
                 'day_of_week' => $weekday,
             ]);
         }

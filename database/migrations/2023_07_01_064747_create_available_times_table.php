@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('available_times', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('available_day_id');
-            $table->foreign('available_day_id')
+            $table->unsignedBigInteger('available_weekdays_id');
+            $table->foreign('available_weekdays_id')
                 ->references('id')
                 ->on('available_weekdays')
                 ->onDelete('cascade');
