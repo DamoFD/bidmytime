@@ -40,6 +40,7 @@ const updateDate = (date) => {
                 @dayclick="updateDate(date)"
                 transparent
                 borderless
+                expanded
             />
         </div>
     </div>

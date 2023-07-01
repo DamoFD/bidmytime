@@ -55,7 +55,12 @@ const timeUntilBidEnds = (slot) => {
                 class="border border-gray-300 w-full py-2 flex items-center justify-center rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
             >
                 <h3 class="font-inter">{{ slot }}</h3>
-                <p>Bidding ends {{ timeUntilBidEnds(slot) }}</p>
+                <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
+                <p>12 Bids</p>
+                <p>Current bid: $312.47</p>
+            </div>
+            <div v-if="timeSlots.length == 0" class="border border-gray-300 w-full py-2 rounded-xl bg-gray-100">
+                <p class="text-center font-inter">No time slots available for this date</p>
             </div>
         </div>
     </div>
