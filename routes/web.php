@@ -25,9 +25,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/calendar', function () {
-    return Inertia::render('Calendar');
-})->name('calendar');
+Route::get('/schedule', function () {
+    return Inertia::render('Schedule');
+})->name('schedule');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
