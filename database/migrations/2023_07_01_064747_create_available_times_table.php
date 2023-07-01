@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->time('start_time');
             $table->time('end_time');
+            $table->integer('timeslot');
             $table->timestamps();
         });
     }

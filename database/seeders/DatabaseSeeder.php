@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         Sellers::factory()->create();
 
-        $this->call(AvailableWeekdaysSeeder::class);
+        $this->call([
+            AvailableWeekdaysSeeder::class,
+            AvailableTimesSeeder::class,
+        ]);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
