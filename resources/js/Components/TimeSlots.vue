@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, watchEffect} from 'vue'
+import {ref, computed, watch} from 'vue'
 import moment from 'moment'
 
 const props = defineProps([
@@ -9,32 +9,39 @@ const props = defineProps([
 
 const rawTimeSlots = ref([])
 
-watchEffect(() => {
-    if (props.selectedWeekday && props.selectedWeekday.available_times.length > 0) {
+const setTimeSlots = () => {
+    if (props.selectedWeekday) {
         const timeslots = []
-
         // Loop through each available time
         props.selectedWeekday.available_times.forEach(time => {
             // Parse the start time and end time using moment.js
             let startTime = moment(time.start_time, 'HH:mm:ss')
             let endTime = moment(time.end_time, 'HH:mm:ss')
 
-            // While the end time is not yet reached
-            while(startTime.isBefore(endTime)) {
-                // Add the start time (formatted) to the timeslots array
-                timeslots.push({
-                    start: startTime.format('h:mm a'),
-                    duration: time.timeslot
-                })
+            let duration = moment.duration(endTime.diff(startTime))
 
-                // Add the timeslot duration to the start time
-                startTime.add(time.timeslot, 'minutes')
-            }
+            // Add the start time (formatted) and end time (formatted) to the timeslots array
+            timeslots.push({
+                start: startTime.format('h:mm a'),
+                end: endTime.format('h:mm a'),
+                duration: duration.asMinutes()
+            })
         })
 
         rawTimeSlots.value = timeslots
     }
-})
+}
+
+watch(
+    () => [props.selectedWeekday, props.selectedDate],
+    () => {
+        setTimeSlots()
+    },
+    { immediate: true }
+)
+
+
+
 
 //Format Date
 const formattedDate = computed(() => {
@@ -69,8 +76,8 @@ const timeUntilBidEnds = (slot) => {
     return duration.humanize(true);
 }
 
-
 </script>
+
 
 <template>
     <!-- Main Wrapper -->
@@ -85,7 +92,7 @@ const timeUntilBidEnds = (slot) => {
                 :key="slot"
                 class="border border-gray-300 w-full py-2 flex items-center justify-center rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
             >
-                <h3 class="font-inter">{{ slot.start }}</h3>
+                <h3 class="font-inter">{{ slot.start }} - {{ slot.end }}</h3>
                 <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
                 <p>12 Bids</p>
                 <p>Current bid: $312.47</p>
