@@ -1,9 +1,9 @@
 <script setup>
 import {ref, defineEmits, onMounted, computed} from 'vue'
-import moment from 'moment'
 import {DatePicker} from 'v-calendar'
 import 'v-calendar/style.css'
 import useDisabledDates from "@/Composables/useDisabledDates.js";
+import useFindWeekdayIdByDate from "@/Composables/useFindWeekdayIdByDate.js";
 
 const date = ref(new Date())
 const props = defineProps({
@@ -19,13 +19,7 @@ const availableDaysOfWeek = computed(() => {
 // List of disabled dates
 const disabledDates = useDisabledDates(availableDaysOfWeek, props.seller.available_exceptions)
 
-
-// find the weekday id
-const findWeekdayIdByDate = (date) => {
-    const dayOfWeek = date.getDay() + 1
-    const weekday = weekdays.value.find(weekday => weekday.day_of_week === dayOfWeek)
-    return weekday ? weekday.id : null
-}
+const findWeekdayIdByDate = useFindWeekdayIdByDate(weekdays)
 
 //Emit current date on mount
 onMounted(() => {
