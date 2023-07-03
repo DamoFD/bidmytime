@@ -18,9 +18,9 @@ class AvailableExceptionsFactory extends Factory
     {
         return [
             'sellers_id' => 1,
-            'date' => '2023-07-03',
-            'start_time' => '13:00',
-            'end_time' => '14:00',
+            'date' => '2023-07-07',
+            'start_time'=> '09:00',
+            'end_time' => '10:00'
         ];
     }
 }

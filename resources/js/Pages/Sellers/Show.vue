@@ -15,8 +15,6 @@ const props = defineProps({
     seller: Object,
 })
 
-console.log(props.seller)
-
 const weekdays = ref(props.seller.available_weekdays)
 
 const selectedWeekday = computed(() => {
