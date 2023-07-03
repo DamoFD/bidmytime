@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class AvailableWeekdays extends Model
 {
     use HasFactory;
+
+    public function availableTimes()
+    {
+        return $this->hasMany(AvailableTimes::class);
+    }
 }

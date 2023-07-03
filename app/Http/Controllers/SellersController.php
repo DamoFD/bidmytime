@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sellers;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SellersController extends Controller
 {
@@ -12,7 +13,11 @@ class SellersController extends Controller
      */
     public function index()
     {
-        //
+        $sellers = Sellers::all();
+
+        return Inertia::render('Sellers/Index', [
+           'sellers' => $sellers
+        ]);
     }
 
     /**
@@ -34,10 +39,15 @@ class SellersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sellers $sellers)
+    public function show($id)
     {
-        //
+        $seller = Sellers::with(['availableWeekdays', 'availableExceptions', 'availableWeekdays.availableTimes'])->findOrFail($id);
+
+        return Inertia::render('Sellers/Show', [
+            'seller' => $seller,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SellersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,6 +16,9 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/sellers', [SellersController::class, 'index'])->name('sellers.index');
+Route::get('/sellers/{id}', [SellersController::class,'show'])->name('sellers.show');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
