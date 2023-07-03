@@ -9,7 +9,7 @@ const props = defineProps([
     'seller',
 ])
 
-const timeSlotExceptions = ref(props.seller.available_exceptions);
+const timeSlotExceptions = ref(props.seller.available_exceptions)
 const rawTimeSlots = ref([])
 
 const setTimeSlots = () => {
@@ -42,9 +42,6 @@ watch(
     },
     { immediate: true }
 )
-
-
-
 
 //Format Date
 const formattedDate = computed(() => {
