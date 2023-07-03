@@ -1,6 +1,7 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
 import moment from 'moment'
+import useFilteredTimeSlots from "@/Composables/useFilteredTimeSlots.js";
 
 const props = defineProps([
     'selectedDate',
@@ -51,29 +52,7 @@ const formattedDate = computed(() => {
 })
 
 // Filter the time slots based on their bid end time and exceptions
-let timeSlots = computed(() => {
-    return rawTimeSlots.value.filter(slot => {
-        // Calculate the bid end time for this slot
-        let slotDateTime = moment(`${formattedDate.value} ${slot.start}`, 'MMMM Do, YYYY h:mm a');
-        let bidEndTime = slotDateTime.clone().subtract(1, 'hours');
-
-        // Include the slot only if its bid end time is in the future
-        let isAfterBidEndTime = bidEndTime.isAfter(moment());
-
-        // Exclude the slot if it exists in the exceptions
-        let isInExceptions = timeSlotExceptions.value.some(exception => {
-            let exceptionDate = moment(exception.date).format('MMMM Do, YYYY');
-            let exceptionStart = moment(exception.start_time, 'HH:mm:ss').format('h:mm a');
-            let exceptionEnd = moment(exception.end_time, 'HH:mm:ss').format('h:mm a');
-
-            return formattedDate.value === exceptionDate &&
-                slot.start === exceptionStart &&
-                slot.end === exceptionEnd;
-        });
-
-        return isAfterBidEndTime && !isInExceptions;
-    });
-});
+let timeSlots = useFilteredTimeSlots(rawTimeSlots, formattedDate, timeSlotExceptions)
 
 
 // Time until bid ends
