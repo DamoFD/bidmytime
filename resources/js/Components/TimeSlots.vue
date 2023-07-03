@@ -4,9 +4,11 @@ import moment from 'moment'
 
 const props = defineProps([
     'selectedDate',
-    'selectedWeekday'
+    'selectedWeekday',
+    'seller',
 ])
 
+const timeSlotExceptions = ref(props.seller.available_exceptions);
 const rawTimeSlots = ref([])
 
 const setTimeSlots = () => {
@@ -48,7 +50,7 @@ const formattedDate = computed(() => {
     return moment(props.selectedDate).format('MMMM Do, YYYY')
 })
 
-// Filter the time slots based on their bid end time
+// Filter the time slots based on their bid end time and exceptions
 let timeSlots = computed(() => {
     return rawTimeSlots.value.filter(slot => {
         // Calculate the bid end time for this slot
@@ -56,9 +58,23 @@ let timeSlots = computed(() => {
         let bidEndTime = slotDateTime.clone().subtract(1, 'hours');
 
         // Include the slot only if its bid end time is in the future
-        return bidEndTime.isAfter(moment());
+        let isAfterBidEndTime = bidEndTime.isAfter(moment());
+
+        // Exclude the slot if it exists in the exceptions
+        let isInExceptions = timeSlotExceptions.value.some(exception => {
+            let exceptionDate = moment(exception.date).format('MMMM Do, YYYY');
+            let exceptionStart = moment(exception.start_time, 'HH:mm:ss').format('h:mm a');
+            let exceptionEnd = moment(exception.end_time, 'HH:mm:ss').format('h:mm a');
+
+            return formattedDate.value === exceptionDate &&
+                slot.start === exceptionStart &&
+                slot.end === exceptionEnd;
+        });
+
+        return isAfterBidEndTime && !isInExceptions;
     });
 });
+
 
 // Time until bid ends
 const timeUntilBidEnds = (slot) => {

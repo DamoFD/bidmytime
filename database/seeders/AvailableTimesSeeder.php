@@ -12,7 +12,7 @@ class AvailableTimesSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 5) as $weekday) {
+        foreach (range(1, 7) as $weekday) {
             \App\Models\AvailableTimes::create([
                 'available_weekdays_id' => $weekday,
                 'start_time' => '09:00:00',

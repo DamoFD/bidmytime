@@ -31,4 +31,9 @@ class Sellers extends Authenticatable
     {
         return $this->hasMany(AvailableWeekdays::class);
     }
+
+    public function availableExceptions()
+    {
+        return $this->hasMany(AvailableExceptions::class);
+    }
 }

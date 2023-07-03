@@ -17,10 +17,10 @@ class AvailableExceptionsFactory extends Factory
     public function definition(): array
     {
         return [
-            'seller_id' => 1,
-            'date' => '2023-07-07',
-            'start_time' => '09:00',
-            'end_time' => '13:00',
+            'sellers_id' => 1,
+            'date' => '2023-07-03',
+            'start_time' => '13:00',
+            'end_time' => '14:00',
         ];
     }
 }
