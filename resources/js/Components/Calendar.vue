@@ -3,6 +3,7 @@ import {ref, defineEmits, onMounted, computed} from 'vue'
 import moment from 'moment'
 import {DatePicker} from 'v-calendar'
 import 'v-calendar/style.css'
+import useDisabledDates from "@/Composables/useDisabledDates.js";
 
 const date = ref(new Date())
 const props = defineProps({
@@ -15,29 +16,8 @@ const availableDaysOfWeek = computed(() => {
     return weekdays.value.map(weekday => weekday.day_of_week)
 })
 
-//List of disabled dates
-const disabledDates = computed(() => {
-    // Full list of all days in week
-    const allDaysOfWeek= [1, 2, 3, 4, 5, 6, 7]
-
-    //Calculate the disabled days by removing available days
-    const disabledDaysOfWeek = allDaysOfWeek.filter(day => !availableDaysOfWeek.value.includes(day))
-
-    // Adding exceptions where there is no start_time or end_time
-    const exceptionDates = props.seller.available_exceptions
-        .filter(exception => !exception.start_time && !exception.end_time)
-        .map(exception => moment(exception.date).add(1, 'days').format('YYYY-MM-DD'))
-
-    // Return the disabled days in required format
-    return [
-        {
-            repeat: {
-                weekdays: disabledDaysOfWeek,
-            }
-        },
-        ...exceptionDates
-    ]
-})
+// List of disabled dates
+const disabledDates = useDisabledDates(availableDaysOfWeek, props.seller.available_exceptions)
 
 
 // find the weekday id
