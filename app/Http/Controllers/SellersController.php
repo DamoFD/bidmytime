@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bids;
 use App\Models\Sellers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

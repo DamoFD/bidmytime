@@ -1,5 +1,6 @@
 <script setup>
 import {ref, computed, watch} from 'vue'
+import {Link} from '@inertiajs/vue3'
 import moment from 'moment'
 import useFilteredTimeSlots from "@/Composables/useFilteredTimeSlots.js";
 
@@ -48,6 +49,11 @@ const formattedDate = computed(() => {
     return moment(props.selectedDate).format('MMMM Do, YYYY')
 })
 
+//Slug Date
+const slugDate= computed(() => {
+    return moment(props.selectedDate).format('YYYY-MM-DD')
+})
+
 // Filter the time slots based on their bid end time and exceptions
 let timeSlots = useFilteredTimeSlots(rawTimeSlots, formattedDate, timeSlotExceptions)
 
@@ -91,9 +97,6 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
     });
 }
 
-
-console.log(props.seller.bids)
-
 </script>
 
 
@@ -105,17 +108,18 @@ console.log(props.seller.bids)
 
         <!-- Time Slots -->
         <div class="flex flex-col items-center w-full p-4">
-            <div
+            <Link
                 v-for="slot in timeSlots"
                 :key="slot"
                 class="border border-gray-300 w-full py-2 flex items-center justify-center rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
+                :href="route('bids.show', { sellers_id: seller.id, bid_date: slugDate, start_time: slot.start, end_time: slot.end })"
             >
                 <h3 class="font-inter">{{ slot.start }} - {{ slot.end }}</h3>
                 <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
                 <p>12 Bids</p>
                 <p>Current bid: ${{slot.highestBid}}</p>
                 <p class="font-inter">{{ slot.duration }} minutes</p>
-            </div>
+            </Link>
             <div v-if="timeSlots.length == 0" class="border border-gray-300 w-full py-2 rounded-xl bg-gray-100">
                 <p class="text-center font-inter">No time slots available for this date</p>
             </div>

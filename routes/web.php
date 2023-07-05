@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BidsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellersController;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,8 @@ use Inertia\Inertia;
 
 Route::get('/sellers', [SellersController::class, 'index'])->name('sellers.index');
 Route::get('/sellers/{id}', [SellersController::class,'show'])->name('sellers.show');
+
+Route::get('/bids/{sellers_id}/{bid_date}/{start_time}/{end_time}', [BidsController::class, 'show'])->name('bids.show');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

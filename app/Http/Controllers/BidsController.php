@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bids;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BidsController extends Controller
 {
@@ -34,9 +35,19 @@ class BidsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Bids $bids)
+    public function show($sellers_id, $bid_date, $start_time, $end_time)
     {
-        //
+        $bids = Bids::with('seller')
+            ->where('sellers_id', $sellers_id)
+            ->where('bid_date', $bid_date)
+            ->where('start_time', $start_time)
+            ->where('end_time', $end_time)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Bids/Show', [
+            'bids' => $bids
+        ]);
     }
 
     /**
