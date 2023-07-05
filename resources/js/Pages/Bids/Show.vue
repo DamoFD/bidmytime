@@ -31,6 +31,8 @@ let highestBid = props.bids.reduce((highest, bid) => {
     return Math.max(highest, bid.amount);
 }, 0);
 
+console.log(props.bids)
+
 </script>
 
 <template>
@@ -43,7 +45,8 @@ let highestBid = props.bids.reduce((highest, bid) => {
         <p>Time left: 1 Hour</p>
         <p>Previous bids:</p>
         <div v-for="bid in bids" :key="bid.id">
-            <p>{{ bid.user_id }}: ${{ bid.amount }}</p>
+            <img :src="bid.user.image" class="rounded-full" />
+            <p>{{ bid.user.name }}: ${{ bid.amount }}</p>
             <p>{{formatCreatedAt(bid.created_at)}}</p>
         </div>
             <div class="w-1/2 bg-neutral-700 rounded-lg flex justify-between items-center shadow-lg">

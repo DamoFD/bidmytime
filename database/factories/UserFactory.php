@@ -23,10 +23,11 @@ class UserFactory extends Factory
 //            'email_verified_at' => now(),
 //            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
 //            'remember_token' => Str::random(10),
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
+            'image' => 'https://randomuser.me/api/portraits/thumb/men/' . rand(25, 75) . '.jpg',
             'remember_token' => Str::random(10),
         ];
     }

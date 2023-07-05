@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         AvailableExceptions::factory()->create();
-        User::factory()->create();
-        Bids::factory(2)->create();
+        User::factory(2)->create();
+        Bids::factory(10)->create();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
