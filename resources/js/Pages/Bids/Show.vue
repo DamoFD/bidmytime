@@ -55,5 +55,5 @@ let highestBid = props.bids.reduce((highest, bid) => {
             </div>
         </div>
     </div>
-    <CreateBidModal v-if="showCreateBidModal" @close="showCreateBidModal = false" />
+    <CreateBidModal :timeSlot="formattedTimeslot" v-if="showCreateBidModal" @close="showCreateBidModal = false" />
 </template>
