@@ -93,7 +93,7 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
         }, 0);
 
         // Add highest bid to slot object
-        return {...slot, highestBid: highestBid.toFixed(2)};
+        return {...slot, highestBid: highestBid.toFixed(2), totalBids: slotBids.length};
     });
 }
 
@@ -116,7 +116,7 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
             >
                 <h3 class="font-inter">{{ slot.start }} - {{ slot.end }}</h3>
                 <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
-                <p>12 Bids</p>
+                <p>{{slot.totalBids}} Bids</p>
                 <p>Current bid: ${{slot.highestBid}}</p>
                 <p class="font-inter">{{ slot.duration }} minutes</p>
             </Link>

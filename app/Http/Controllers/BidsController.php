@@ -46,7 +46,10 @@ class BidsController extends Controller
             ->get();
 
         return Inertia::render('Bids/Show', [
-            'bids' => $bids
+            'bids' => $bids,
+            'selectedDate' => $bid_date,
+            'startTime' => urldecode($start_time),
+            'endTime' => urldecode($end_time),
         ]);
     }
 
