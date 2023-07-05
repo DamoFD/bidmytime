@@ -10,7 +10,7 @@ const props = defineProps({
     endTime: String,
 })
 
-const sellerName = props.bids[0].seller.name
+const seller = props.bids[0].seller
 const totalBids = props.bids.length
 let showCreateBidModal = ref(false)
 
@@ -39,8 +39,10 @@ console.log(props.bids)
     <div class="w-full min-h-screen bg-gray-300 flex justify-center items-center">
         <div class="w-full bg-white rounded-lg shadow-lg p-4 flex-col items-center flex mx-10">
         <h1>Bid on this time slot</h1>
+            <img :src="seller.image" class="rounded-full w-20 h-20" :alt="seller.name + '\'s image'" />
+            <h2>{{seller.name}}</h2>
+            <p>{{seller.bio}}</p>
             <p>Timeslot: {{formattedTimeslot}}</p>
-        <h2>{{sellerName}}</h2>
         <p>This is your time slot description</p>
         <p>Time left: 1 Hour</p>
         <p>Previous bids:</p>
@@ -58,5 +60,5 @@ console.log(props.bids)
             </div>
         </div>
     </div>
-    <CreateBidModal :timeSlot="formattedTimeslot" v-if="showCreateBidModal" @close="showCreateBidModal = false" />
+    <CreateBidModal :timeSlot="formattedTimeslot" :bids="bids" v-if="showCreateBidModal" @close="showCreateBidModal = false" />
 </template>
