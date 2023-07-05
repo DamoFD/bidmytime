@@ -37,7 +37,7 @@ class BidsController extends Controller
      */
     public function show($sellers_id, $bid_date, $start_time, $end_time)
     {
-        $bids = Bids::with('seller')
+        $bids = Bids::with('seller', 'user')
             ->where('sellers_id', $sellers_id)
             ->where('bid_date', $bid_date)
             ->where('start_time', $start_time)

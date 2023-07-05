@@ -17,7 +17,7 @@ class BidsFactory extends Factory
     public function definition(): array
     {
         return [
-                'user_id' => 1,
+                'user_id' => rand(1, 2),
                 'sellers_id' => 1,
                 'bid_date' => '2023-07-06',
                 'start_time' => '09:00:00',
