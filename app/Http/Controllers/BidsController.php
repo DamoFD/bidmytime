@@ -3,22 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bids;
-use App\Models\Sellers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class SellersController extends Controller
+class BidsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $sellers = Sellers::all();
-
-        return Inertia::render('Sellers/Index', [
-           'sellers' => $sellers
-        ]);
+        //
     }
 
     /**
@@ -40,20 +35,25 @@ class SellersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($sellers_id, $bid_date, $start_time, $end_time)
     {
-        $seller = Sellers::with(['availableWeekdays', 'availableExceptions', 'availableWeekdays.availableTimes', 'bids'])->findOrFail($id);
+        $bids = Bids::with('seller')
+            ->where('sellers_id', $sellers_id)
+            ->where('bid_date', $bid_date)
+            ->where('start_time', $start_time)
+            ->where('end_time', $end_time)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return Inertia::render('Sellers/Show', [
-            'seller' => $seller,
+        return Inertia::render('Bids/Show', [
+            'bids' => $bids
         ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sellers $sellers)
+    public function edit(Bids $bids)
     {
         //
     }
@@ -61,7 +61,7 @@ class SellersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sellers $sellers)
+    public function update(Request $request, Bids $bids)
     {
         //
     }
@@ -69,7 +69,7 @@ class SellersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sellers $sellers)
+    public function destroy(Bids $bids)
     {
         //
     }

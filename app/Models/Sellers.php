@@ -36,4 +36,9 @@ class Sellers extends Authenticatable
     {
         return $this->hasMany(AvailableExceptions::class);
     }
+
+    public function bids()
+    {
+        return $this->hasMany(Bids::class);
+    }
 }
