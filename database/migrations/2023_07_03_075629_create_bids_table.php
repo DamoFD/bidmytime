@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('bid_date');
             $table->time('start_time');
             $table->time('end_time');
+            $table->unsignedFloat('amount');
             $table->timestamps();
         });
     }

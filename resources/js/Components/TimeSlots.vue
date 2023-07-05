@@ -31,7 +31,7 @@ const setTimeSlots = () => {
             })
         })
 
-        rawTimeSlots.value = timeslots
+        rawTimeSlots.value = attachHighestBidsToTimeSlots(timeslots, props.seller.bids)
     }
 }
 
@@ -68,6 +68,32 @@ const timeUntilBidEnds = (slot) => {
     return duration.humanize(true);
 }
 
+const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
+    return timeSlots.map(slot => {
+        // Convert slot start and end times to moment objects for comparison
+        let slotStart = moment(slot.start, 'h:mm a');
+        let slotEnd = moment(slot.end, 'h:mm a');
+
+        // Filter bids that fall into this slot
+        let slotBids = bids.filter(bid => {
+            let bidStart = moment(bid.start_time, 'HH:mm:ss');
+            let bidEnd = moment(bid.end_time, 'HH:mm:ss');
+            return bidStart.isSameOrAfter(slotStart) && bidEnd.isSameOrBefore(slotEnd);
+        });
+
+        // Find the highest bid
+        let highestBid = slotBids.reduce((highest, bid) => {
+            return Math.max(highest, bid.amount);
+        }, 0);
+
+        // Add highest bid to slot object
+        return {...slot, highestBid: highestBid.toFixed(2)};
+    });
+}
+
+
+console.log(props.seller.bids)
+
 </script>
 
 
@@ -87,7 +113,7 @@ const timeUntilBidEnds = (slot) => {
                 <h3 class="font-inter">{{ slot.start }} - {{ slot.end }}</h3>
                 <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
                 <p>12 Bids</p>
-                <p>Current bid: $312.47</p>
+                <p>Current bid: ${{slot.highestBid}}</p>
                 <p class="font-inter">{{ slot.duration }} minutes</p>
             </div>
             <div v-if="timeSlots.length == 0" class="border border-gray-300 w-full py-2 rounded-xl bg-gray-100">

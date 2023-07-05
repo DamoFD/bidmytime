@@ -41,7 +41,7 @@ class SellersController extends Controller
      */
     public function show($id)
     {
-        $seller = Sellers::with(['availableWeekdays', 'availableExceptions', 'availableWeekdays.availableTimes'])->findOrFail($id);
+        $seller = Sellers::with(['availableWeekdays', 'availableExceptions', 'availableWeekdays.availableTimes', 'bids'])->findOrFail($id);
 
         return Inertia::render('Sellers/Show', [
             'seller' => $seller,

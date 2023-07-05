@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\AvailableExceptions;
+use App\Models\Bids;
 use App\Models\Sellers;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +24,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         AvailableExceptions::factory()->create();
+        User::factory()->create();
+        Bids::factory(2)->create();
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
