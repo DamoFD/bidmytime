@@ -41,26 +41,23 @@ class BidsController extends Controller
         $seller = Sellers::find($request->sellers_id);
 
         if (!$seller) {
-            dd('seller not found');
             return back()->withErrors(['sellers_id' => 'Seller not found.']);
         }
 
         // Extract the day of the week from the date (Monday = 1, Sunday = 7)
-        $dayOfWeek = date('N', strtotime($request->date));
+        $dayOfWeek = date('w', strtotime($request->date)) + 1;
 
         $weekday = $seller->availableWeekdays->firstWhere('day_of_week', $dayOfWeek);
 
         if (!$weekday) {
-            dd('weekday not found');
-            return back()->withErrors(['date' => 'Date not found.']);
+            return back()->withErrors(['date' => 'This date is not available for this seller.']);
         }
 
         $startTimeExists = $weekday->availableTimes->contains('start_time', $request->startTime);
         $endTimeExists = $weekday->availableTimes->contains('end_time', $request->endTime);
 
         if (!$startTimeExists || !$endTimeExists) {
-            dd('start time or end time not found');
-            return back()->withErrors(['date' => 'Invalid start time or end time.']);
+            return back()->withErrors(['date' => 'This timeslot is not available for this seller.']);
         }
 
         // Check if the bid amount is greater than the highest bid for the time slot
@@ -71,8 +68,18 @@ class BidsController extends Controller
             ->max('amount');
 
         if ($request->amount <= $highestBid) {
-            dd('bid amount must be greater than the current highest bid.');
             return back()->withErrors(['amount' => 'Bid amount must be greater than the current highest bid.']);
+        }
+
+        // Check if the time slot has an exception
+        $exception = $seller->availableExceptions->where('sellers_id', $request->sellers_id)
+            ->where('date', $request->date)
+            ->where('start_time', $request->startTime)
+            ->where('end_time', $request->endTime)
+            ->first();
+
+        if ($exception) {
+            return back()->withErrors(['date' => 'This time slot is not available for this seller.']);
         }
 
         // If all validations pass, create the bid
@@ -84,7 +91,6 @@ class BidsController extends Controller
         $bids->start_time = $request->startTime;
         $bids->end_time = $request->endTime;
         $bids->save();
-        dd('Bid successfully created.');
         return back()->with('success', 'Bid successfully created.');
     }
 
@@ -93,7 +99,7 @@ class BidsController extends Controller
      */
     public function show($sellers_id, $bid_date, $start_time, $end_time)
     {
-        $bids = Bids::with('seller', 'user')
+        $bids = Bids::with('user')
             ->where('sellers_id', $sellers_id)
             ->where('bid_date', $bid_date)
             ->where('start_time', $start_time)
@@ -101,8 +107,11 @@ class BidsController extends Controller
             ->orderBy('amount', 'desc')
             ->get();
 
+        $seller = Sellers::findOrFail($sellers_id);
+
         return Inertia::render('Bids/Show', [
             'bids' => $bids,
+            'seller' => $seller,
             'selectedDate' => $bid_date,
             'startTime' => urldecode($start_time),
             'endTime' => urldecode($end_time),

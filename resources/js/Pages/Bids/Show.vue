@@ -8,9 +8,9 @@ const props = defineProps({
     selectedDate: String,
     startTime: String,
     endTime: String,
+    seller: Object,
 })
 
-const seller = props.bids[0].seller
 const totalBids = props.bids.length
 let showCreateBidModal = ref(false)
 
@@ -44,11 +44,14 @@ let highestBidder = props.bids.reduce((highest, bid) => {
         <p>This is your time slot description</p>
         <p>Time left: 1 Hour</p>
         <p>Previous bids:</p>
-        <div v-for="bid in bids" :key="bid.id">
+        <div v-if="bids.length !== 0" v-for="bid in bids" :key="bid.id">
             <img :src="bid.user.image" class="rounded-full" />
             <p>{{ bid.user.name }}: ${{ bid.amount }}</p>
             <p>{{formatCreatedAt(bid.created_at)}}</p>
         </div>
+            <div v-else>
+                <p>Be the first to bid!</p>
+            </div>
             <div class="w-1/2 bg-neutral-700 rounded-lg flex justify-between items-center shadow-lg">
                 <div class="text-gray-200 p-6">
                     <p class="pb-2">Highest Bid</p>
