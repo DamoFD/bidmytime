@@ -10,7 +10,7 @@ const props = defineProps({
     endTime: String,
 })
 
-const sellerName = props.bids[0].seller.name
+const seller = props.bids[0].seller
 const totalBids = props.bids.length
 let showCreateBidModal = ref(false)
 
@@ -27,11 +27,9 @@ const formattedTimeslot = computed(() => {
 })
 
 // Find the highest bid
-let highestBid = props.bids.reduce((highest, bid) => {
-    return Math.max(highest, bid.amount);
-}, 0);
-
-console.log(props.bids)
+let highestBidder = props.bids.reduce((highest, bid) => {
+    return (bid.amount > highest.amount)? bid : highest
+}, {amount: 0});
 
 </script>
 
@@ -39,8 +37,10 @@ console.log(props.bids)
     <div class="w-full min-h-screen bg-gray-300 flex justify-center items-center">
         <div class="w-full bg-white rounded-lg shadow-lg p-4 flex-col items-center flex mx-10">
         <h1>Bid on this time slot</h1>
+            <img :src="seller.image" class="rounded-full w-20 h-20" :alt="seller.name + '\'s image'" />
+            <h2>{{seller.name}}</h2>
+            <p>{{seller.bio}}</p>
             <p>Timeslot: {{formattedTimeslot}}</p>
-        <h2>{{sellerName}}</h2>
         <p>This is your time slot description</p>
         <p>Time left: 1 Hour</p>
         <p>Previous bids:</p>
@@ -52,11 +52,21 @@ console.log(props.bids)
             <div class="w-1/2 bg-neutral-700 rounded-lg flex justify-between items-center shadow-lg">
                 <div class="text-gray-200 p-6">
                     <p class="pb-2">Highest Bid</p>
-                    <p>${{highestBid}} [{{totalBids}} bids]</p>
+                    <p>${{highestBidder.amount}} [{{totalBids}} bids]</p>
                 </div>
                 <p @click="showCreateBidModal = true" class="text-neutral-700 bg-yellow-200 p-2 mr-6 rounded-lg cursor-pointer">Place a Bid</p>
             </div>
         </div>
     </div>
-    <CreateBidModal :timeSlot="formattedTimeslot" v-if="showCreateBidModal" @close="showCreateBidModal = false" />
+    <CreateBidModal
+        :timeSlot="formattedTimeslot"
+        :bids="bids"
+        :selectedDate="selectedDate"
+        :startTime="startTime"
+        :endTime="endTime"
+        :seller="seller"
+        :highestBidder="highestBidder"
+        v-if="showCreateBidModal"
+        @close="showCreateBidModal = false"
+    />
 </template>

@@ -22,6 +22,7 @@ Route::get('/sellers', [SellersController::class, 'index'])->name('sellers.index
 Route::get('/sellers/{id}', [SellersController::class,'show'])->name('sellers.show');
 
 Route::get('/bids/{sellers_id}/{bid_date}/{start_time}/{end_time}', [BidsController::class, 'show'])->name('bids.show');
+Route::post('/bids', [BidsController::class, 'store'])->name('bids.store');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
