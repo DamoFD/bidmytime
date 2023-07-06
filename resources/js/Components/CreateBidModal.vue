@@ -37,8 +37,6 @@ const closeModal = () => {
     emit('close')
 }
 
-console.log(formatTimeTo24Hour(props.endTime))
-
 </script>
 
 <template>
@@ -54,7 +52,12 @@ console.log(formatTimeTo24Hour(props.endTime))
             </div>
             <div>
                 <input v-model="form.amount" type="text" placeholder="Enter your bid"/>
+
+                <!-- Errors -->
                 <p v-if="form.errors.amount" class="text-red-600">{{ form.errors.amount}}</p>
+                <p v-if="form.errors.sellers_id" class="text-red-600">{{ form.errors.sellers_id}}</p>
+                <p v-if="form.errors.date" class="text-red-600">{{ form.errors.date }}</p>
+
                 <div class="flex justify-between w-full py-6">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="submitBid()">Bid</button>
                     <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="closeModal()">Cancel</button>
