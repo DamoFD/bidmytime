@@ -69,7 +69,7 @@ let highestBidder = props.bids.reduce((highest, bid) => {
                 <p class="text-md font-nunito font-extrabold text-gray-900">3 hours</p>
             </div>
         </div>
-        <p class="pl-4 mt-4 text-gray-900 font-nunito">Description</p>
+        <p class="pl-4 mt-4 text-gray-900 font-nunito font-extrabold">Description</p>
         <p class="px-4 font-inter text-gray-500">{{seller.bio}}</p>
 
         <!-- Place Bid -->
