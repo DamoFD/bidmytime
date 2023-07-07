@@ -102,23 +102,43 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
 
 <template>
     <!-- Main Wrapper -->
-    <div class="flex flex-col justify-center items-center w-1/2">
-        <h2 class="text-xl font-nunito font-black text-gray-700">{{ formattedDate }}</h2>
-        <p class="text-md font-inter">What time works best?</p>
+    <div class="flex flex-col w-full items-center">
+        <h2 class="text-lg font-nunito font-black text-gray-900 md:text-xl">{{ formattedDate }}</h2>
+        <p class="text-md font-inter text-gray-500 mb-4 md:text-lg">What time works best?</p>
 
         <!-- Time Slots -->
-        <div class="flex flex-col items-center w-full p-4">
+        <div class="flex flex-col items-center w-full p-4 overflow-y-auto h-80 md:h-96">
             <Link
                 v-for="slot in timeSlots"
                 :key="slot"
-                class="border border-gray-300 w-full py-2 flex items-center justify-center rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
+                class="border border-gray-300 w-full py-2 flex rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
                 :href="route('bids.show', { sellers_id: seller.id, bid_date: slugDate, start_time: slot.start, end_time: slot.end })"
             >
-                <h3 class="font-inter">{{ slot.start }} - {{ slot.end }}</h3>
-                <p class="font-inter">Bidding ends {{ timeUntilBidEnds(slot) }}</p>
-                <p>{{slot.totalBids}} Bids</p>
-                <p>Current bid: ${{slot.highestBid}}</p>
-                <p class="font-inter">{{ slot.duration }} minutes</p>
+                <div class="flex justify-between px-2">
+                    <div>
+                        <p class="font-inter text-gray-500 text-sm md:text-lg">Time Slot</p>
+                        <h3 class="font-nunito text-gray-900 font-extrabold md:text-xl">{{ slot.start }} - {{ slot.end }}</h3>
+                    </div>
+                    <div>
+                        <p class="font-inter text-gray-500 text-sm md:text-lg">Current Bid</p>
+                        <h3 class="font-nunito text-gray-900 font-extrabold md:text-xl">${{ slot.highestBid }}</h3>
+                    </div>
+                </div>
+                <div class="flex justify-between px-2">
+                <div>
+                    <p class="font-inter text-gray-500 text-sm mt-2 md:text-lg">Ending</p>
+                    <p class="font-nunito text-gray-900 font-extrabold md:text-xl">{{ timeUntilBidEnds(slot) }}</p>
+                </div>
+                    <div>
+                        <p class="font-inter text-gray-500 text-sm mt-2 md:text-lg">Total Bids</p>
+                        <p class="font-nunito text-gray-900 font-extrabold md:text-xl">{{ slot.totalBids }}</p>
+                    </div>
+                </div>
+                <p class="font-inter text-gray-500 text-sm mt-2 ml-2 md:text-lg">Duration</p>
+                <p class="font-nunito text-gray-900 font-extrabold ml-2 md:text-xl">{{ slot.duration }} minutes</p>
+                <div class="flex justify-center items-center mt-2">
+                    <p class="bg-gradient-to-r from-[#02AABD] to-[#00CDAC] py-2 px-12 rounded-lg cursor-pointer text-white font-nunito font-extrabold md:text-xl">Bid</p>
+                </div>
             </Link>
             <div v-if="timeSlots.length == 0" class="border border-gray-300 w-full py-2 rounded-xl bg-gray-100">
                 <p class="text-center font-inter">No time slots available for this date</p>

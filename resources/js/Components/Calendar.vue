@@ -37,20 +37,16 @@ const updateDate = (date) => {
 
 <template>
     <!-- Main Wrapper -->
-    <div class="flex flex-col items-center w-1/2 py-10">
-        <img :src="seller.image" class="rounded-full w-10 h-10" />
-        <h1 class="text-2xl font-nunito font-black text-gray-800">{{ seller.name }}</h1>
-        <p class="font-inter mx-6">{{seller.bio}}</p>
-        <div class="mt-6">
+    <div class="flex flex-col items-center w-11/12 md:w-1/2">
             <DatePicker
                 v-model="date"
                 :disabled-dates="disabledDates"
                 :min-date="new Date()"
+                color="green"
                 @dayclick="updateDate(date)"
                 transparent
                 borderless
                 expanded
             />
-        </div>
     </div>
 </template>
