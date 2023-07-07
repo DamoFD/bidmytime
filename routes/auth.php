@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSellerSessionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -7,10 +8,39 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredSellerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Seller Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest:seller')->group(function () {
+    Route::get('seller/register', [RegisteredSellerController::class, 'create'])
+        ->name('seller.register');
+
+    Route::post('seller/register', [RegisteredSellerController::class, 'store'])
+        ->name('seller.register');
+
+    Route::get('seller/login', [AuthenticatedSellerSessionController::class, 'create'])
+        ->name('seller.login');
+
+    Route::post('seller/login', [AuthenticatedSellerSessionController::class, 'store'])
+        ->name('seller.login');
+
+    Route::post('seller/logout', [AuthenticatedSellerSessionController::class, 'destroy'])
+        ->name('seller.logout');
+});
+
+/*
+|--------------------------------------------------------------------------
+| User Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
