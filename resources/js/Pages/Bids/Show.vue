@@ -15,7 +15,7 @@ const props = defineProps({
     seller: Object,
 })
 
-const saved = ref(false);
+const saved = ref(false)
 
 const totalBids = props.bids.length
 let showCreateBidModal = ref(false)
