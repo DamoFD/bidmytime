@@ -24,6 +24,17 @@ Route::get('/sellers/{id}', [SellersController::class,'show'])->name('sellers.sh
 Route::get('/bids/{sellers_id}/{bid_date}/{start_time}/{end_time}', [BidsController::class, 'show'])->name('bids.show');
 Route::post('/bids', [BidsController::class, 'store'])->name('bids.store');
 
+//Seller Auth
+Route::get('/seller', function () {
+    return Inertia::render('Seller', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+// User Auth
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -33,10 +44,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/schedule', function () {
-    return Inertia::render('Schedule');
-})->name('schedule');
+// Seller Dashboard
+Route::get('/seller/dashboard', function () {
+    return Inertia::render('SellerDashboard');
+})->middleware(['auth.seller'])->name('seller.dashboard');
 
+// User Dashboard
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
