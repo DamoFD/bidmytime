@@ -32,9 +32,10 @@ Route::middleware('guest:seller')->group(function () {
     Route::post('seller/login', [AuthenticatedSellerSessionController::class, 'store'])
         ->name('seller.login');
 
+});
+
     Route::post('seller/logout', [AuthenticatedSellerSessionController::class, 'destroy'])
         ->name('seller.logout');
-});
 
 /*
 |--------------------------------------------------------------------------
