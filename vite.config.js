@@ -20,4 +20,14 @@ export default defineConfig({
         }),
         Icons(),
     ],
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:80',
+                changeOrigin: true,
+                secure: false,
+                logLevel: 'debug',
+            },
+        },
+    },
 });
