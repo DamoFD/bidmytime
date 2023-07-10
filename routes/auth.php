@@ -42,7 +42,7 @@ Route::middleware(['guest:seller', 'guest'])->group(function () {
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest:seller', 'guest'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 

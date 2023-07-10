@@ -25,11 +25,7 @@ class AuthenticateSeller extends Middleware
             return redirect(RouteServiceProvider::HOME);
         }
 
-        if (!Auth::guard('seller')->check() && !Auth::check()) {
-            return redirect('/seller/login');
-        }
-
-        return $this->redirectTo($request);
+        return redirect('/seller/login');
     }
     protected function redirectTo(Request $request): ?string
     {
