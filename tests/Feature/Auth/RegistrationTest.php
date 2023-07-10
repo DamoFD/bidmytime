@@ -2,13 +2,22 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
+
+    private $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
 
     public function test_registration_screen_can_be_rendered(): void
     {
@@ -27,6 +36,15 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_loggedin_user_cannot_view_registration(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->get('/register');
+
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }

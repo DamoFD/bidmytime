@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('guest:seller')->group(function () {
+Route::middleware(['guest:seller', 'guest'])->group(function () {
     Route::get('seller/register', [RegisteredSellerController::class, 'create'])
         ->name('seller.register');
 
@@ -42,7 +42,7 @@ Route::middleware('guest:seller')->group(function () {
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest:seller', 'guest'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 

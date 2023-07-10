@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvailableWeekdays;
 use App\Models\Bids;
 use App\Models\Sellers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BidsController extends Controller
@@ -99,6 +102,23 @@ class BidsController extends Controller
      */
     public function show($sellers_id, $bid_date, $start_time, $end_time)
     {
+
+        $seller = Sellers::findOrFail($sellers_id);
+
+        // Check if time slot exists
+
+        // Extract the day of the week from the date (Monday = 1, Sunday = 7)
+        $bid_date = Carbon::parse($bid_date);
+        $weekday = $bid_date->dayOfWeek + 1;
+        $availableWeekday = AvailableWeekdays::where('sellers_id', $sellers_id)
+            ->where('day_of_week', $weekday)
+            ->first();
+
+        if (!$availableWeekday) {
+            abort(404);
+        }
+
+        // get bids that match parameters
         $bids = Bids::with('user')
             ->where('sellers_id', $sellers_id)
             ->where('bid_date', $bid_date)
@@ -106,8 +126,6 @@ class BidsController extends Controller
             ->where('end_time', $end_time)
             ->orderBy('amount', 'desc')
             ->get();
-
-        $seller = Sellers::findOrFail($sellers_id);
 
         return Inertia::render('Bids/Show', [
             'bids' => $bids,

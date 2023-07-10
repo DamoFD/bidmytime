@@ -3,22 +3,79 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
+
+    private $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
 
     public function test_profile_page_is_displayed(): void
     {
-        $user = User::factory()->create();
-
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/profile');
 
-        $response->assertOk();
+        $response->assertStatus(200);
+    }
+
+    public function test_profile_page_is_not_displayed_when_not_logged_in(): void
+    {
+        $response = $this->get('/profile');
+
+        $response->assertRedirect('/login');
+    }
+
+    public function test_dashboard_page_is_not_displayed_when_not_logged_in(): void
+    {
+        $response = $this->get('/dashboard');
+
+        $response->assertRedirect('/login');
+    }
+
+    public function test_user_cannot_view_seller_dashboard(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/dashboard');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_user_cannot_view_seller_profile(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/profile');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_user_cannot_view_seller_login(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/login');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_user_cannot_view_seller_registration(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/register');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
     public function test_profile_information_can_be_updated(): void
