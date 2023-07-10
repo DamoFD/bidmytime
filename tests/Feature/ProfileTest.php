@@ -60,6 +60,24 @@ class ProfileTest extends TestCase
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
+    public function test_user_cannot_view_seller_login(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/login');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_user_cannot_view_seller_registration(): void
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/seller/register');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->create();
