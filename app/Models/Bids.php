@@ -9,6 +9,8 @@ class Bids extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'sellers_id', 'bid_date', 'start_time', 'end_time', 'amount'];
+
     public function seller()
     {
         return $this->belongsTo(Sellers::class, 'sellers_id');
