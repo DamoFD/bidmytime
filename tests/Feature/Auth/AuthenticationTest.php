@@ -4,12 +4,20 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
+
+    private $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
 
     public function test_login_screen_can_be_rendered(): void
     {
@@ -41,5 +49,14 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertGuest();
+    }
+
+    public function test_loggedin_user_cannot_view_login(): void
+    {
+        $this->actingAs($this->user);
+
+        $response = $this->get('/login');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }

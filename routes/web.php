@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BidsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SellerProfileController;
 use App\Http\Controllers\SellersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,10 @@ Route::get('/', function () {
 Route::get('/seller/dashboard', function () {
     return Inertia::render('SellerDashboard');
 })->middleware(['auth.seller'])->name('seller.dashboard');
+
+Route::middleware('auth.seller')->group(function () {
+    Route::get('/seller/profile', [SellerProfileController::class, 'edit'])->name('seller.profile.edit');
+});
 
 // User Dashboard
 Route::get('/dashboard', function () {
