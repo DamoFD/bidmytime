@@ -18,9 +18,13 @@ const setTimeSlots = () => {
         const timeslots = []
         // Loop through each available time
         props.selectedWeekday.available_times.forEach(time => {
-            // Parse the start time and end time using moment.js
-            let startTime = moment(time.start_time, 'HH:mm:ss')
-            let endTime = moment(time.end_time, 'HH:mm:ss')
+            // Convert the start time and end time from utc to local timezone
+            let startTime = moment.utc(time.start_time, 'HH:mm:ss').local()
+            let endTime = moment.utc(time.end_time, 'HH:mm:ss').local()
+
+            if (endTime.isBefore(startTime)) {
+                endTime.add(1, 'days');
+            }
 
             let duration = moment.duration(endTime.diff(startTime))
 
@@ -32,7 +36,7 @@ const setTimeSlots = () => {
             })
         })
 
-        rawTimeSlots.value = attachHighestBidsToTimeSlots(timeslots, props.seller.bids)
+        rawTimeSlots.value = attachHighestBidsToTimeSlots(timeslots, props.seller.bids, props.selectedDate)
     }
 }
 
@@ -74,17 +78,20 @@ const timeUntilBidEnds = (slot) => {
     return duration.humanize(true);
 }
 
-const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
+const attachHighestBidsToTimeSlots = (timeSlots, bids, selectedDate) => {
     return timeSlots.map(slot => {
         // Convert slot start and end times to moment objects for comparison
-        let slotStart = moment(slot.start, 'h:mm a');
-        let slotEnd = moment(slot.end, 'h:mm a');
+        let slotStart = moment(slot.start, 'h:mm a').format('HH:mm:ss');
+        let slotEnd = moment(slot.end, 'h:mm a').format('HH:mm:ss');
 
         // Filter bids that fall into this slot
         let slotBids = bids.filter(bid => {
-            let bidStart = moment(bid.start_time, 'HH:mm:ss');
-            let bidEnd = moment(bid.end_time, 'HH:mm:ss');
-            return bidStart.isSameOrAfter(slotStart) && bidEnd.isSameOrBefore(slotEnd);
+            let bidStart = moment.utc(bid.start_time, 'HH:mm:ss').local().format('HH:mm:ss');
+            let bidEnd = moment.utc(bid.end_time, 'HH:mm:ss').local().format('HH:mm:ss');
+            let bidDate = bid.bid_date;
+            let slotDate = moment(selectedDate).format('YYYY-MM-DD');
+
+            return bidStart === slotStart && bidEnd === slotEnd && bidDate === slotDate;
         });
 
         // Find the highest bid
@@ -95,6 +102,11 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
         // Add highest bid to slot object
         return {...slot, highestBid: highestBid.toFixed(2), totalBids: slotBids.length};
     });
+}
+
+//Convert Time to UTC 24 hour
+const convertTimeToUTC = (time) => {
+    return moment(`${formattedDate.value} ${time}`, 'MMMM Do, YYYY h:mm a').utc().format('HH:mm:ss')
 }
 
 </script>
@@ -112,7 +124,7 @@ const attachHighestBidsToTimeSlots = (timeSlots, bids) => {
                 v-for="slot in timeSlots"
                 :key="slot"
                 class="border border-gray-300 w-full py-2 flex rounded-xl flex-col mb-2 cursor-pointer hover:bg-gray-100"
-                :href="route('bids.show', { sellers_id: seller.id, bid_date: slugDate, start_time: slot.start, end_time: slot.end })"
+                :href="route('bids.show', { sellers_id: seller.id, bid_date: slugDate, start_time: convertTimeToUTC(slot.start), end_time: convertTimeToUTC(slot.end) })"
             >
                 <div class="flex justify-between px-2">
                     <div>

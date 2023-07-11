@@ -14,16 +14,12 @@ const props = defineProps({
     highestBidder: Object,
 })
 
-const formatTimeTo24Hour = (time) => {
-    return moment(time, ["h:mm A"]).format("HH:mm:ss")
-}
-
 const form = useForm({
     amount: null,
     sellers_id: props.seller.id,
     date: props.selectedDate,
-    startTime: formatTimeTo24Hour(props.startTime),
-    endTime: formatTimeTo24Hour(props.endTime),
+    startTime: props.startTime,
+    endTime: props.endTime,
 })
 
 const submitBid = () => {
@@ -61,6 +57,9 @@ const closeModal = () => {
             <span class="border border-gray-200 mx-2 pl-2 font-inter text-gray-900">$
                 <input class="mx-2 h-10 focus:ring-0 focus:outline-0" v-model="form.amount" placeholder="Enter your bid" />
             </span>
+            <p v-if="form.errors.amount" class="text-red-600">{{ form.errors.amount}}</p>
+            <p v-if="form.errors.sellers_id" class="text-red-600">{{ form.errors.sellers_id}}</p>
+            <p v-if="form.errors.date" class="text-red-600">{{ form.errors.date }}</p>
             <div class="mx-2 my-4 flex justify-between">
                 <button class="bg-gradient-to-r from-[#02AABD] to-[#00CDAC] py-2 w-24 rounded-lg cursor-pointer text-white font-nunito font-extrabold" @click="submitBid">Bid</button>
                 <button class="bg-gradient-to-r from-[#D4145A] to-[#FBB03B] py-2 w-24 rounded-lg cursor-pointer text-white font-nunito font-extrabold" @click="closeModal">Cancel</button>

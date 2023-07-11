@@ -28,7 +28,7 @@ class ShowBidsTest extends TestCase
         $this->seller = Sellers::factory()->create();
         $this->availableWeekday = AvailableWeekdays::create([
             'sellers_id' => $this->seller->id,
-            'day_of_week' => 2,
+            'day_of_week' => 1,
         ]);
         $this->availableTime = AvailableTimes::create([
             'available_weekdays_id' => $this->availableWeekday->id,
