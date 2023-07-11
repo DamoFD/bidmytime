@@ -27,8 +27,8 @@ const formatCreatedAt = (date) => {
 
 // format timeslot
 const formattedTimeslot = computed(() => {
-    const startDate = moment(`${props.selectedDate} ${props.startTime}`, 'YYYY-MM-DD h:mm a')
-    const endDate = moment(`${props.selectedDate} ${props.endTime}`, 'YYYY-MM-DD h:mm a')
+    const startDate = moment.utc(`${props.selectedDate} ${props.startTime}`, 'YYYY-MM-DD h:mm a').local()
+    const endDate = moment.utc(`${props.selectedDate} ${props.endTime}`, 'YYYY-MM-DD h:mm a').local()
     return `${startDate.format('MMMM Do, YYYY h:mm a')} - ${endDate.format('h:mm a')}`
 })
 
