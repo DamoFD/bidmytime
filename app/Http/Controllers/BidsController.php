@@ -48,7 +48,7 @@ class BidsController extends Controller
         }
 
         // Extract the day of the week from the date (Monday = 1, Sunday = 7)
-        $dayOfWeek = date('w', strtotime($request->date)) + 1;
+        $dayOfWeek = date('N', strtotime($request->date));
 
         $weekday = $seller->availableWeekdays->firstWhere('day_of_week', $dayOfWeek);
 
