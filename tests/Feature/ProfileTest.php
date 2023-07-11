@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -21,61 +22,61 @@ class ProfileTest extends TestCase
 
     public function test_profile_page_is_displayed(): void
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
-            ->get('/profile');
-
-        $response->assertStatus(200);
+            ->get(route('profile.edit'))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                ->component('Profile/Edit')
+                ->where('errors', [])
+            );
     }
 
     public function test_profile_page_is_not_displayed_when_not_logged_in(): void
     {
-        $response = $this->get('/profile');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('profile.edit'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_dashboard_page_is_not_displayed_when_not_logged_in(): void
     {
-        $response = $this->get('/dashboard');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('dashboard'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_user_cannot_view_seller_dashboard(): void
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
-            ->get('/seller/dashboard');
-
-        $response->assertRedirect(RouteServiceProvider::HOME);
+            ->get(route('seller.dashboard'))
+            ->assertRedirect(RouteServiceProvider::HOME);
     }
 
     public function test_user_cannot_view_seller_profile(): void
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
-            ->get('/seller/profile');
-
-        $response->assertRedirect(RouteServiceProvider::HOME);
+            ->get(route('seller.profile.edit'))
+            ->assertRedirect(RouteServiceProvider::HOME);
     }
 
     public function test_user_cannot_view_seller_login(): void
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
-            ->get('/seller/login');
-
-        $response->assertRedirect(RouteServiceProvider::HOME);
+            ->get(route('seller.login'))
+            ->assertRedirect(RouteServiceProvider::HOME);
     }
 
     public function test_user_cannot_view_seller_registration(): void
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
-            ->get('/seller/register');
-
-        $response->assertRedirect(RouteServiceProvider::HOME);
+            ->get(route('seller.register'))
+            ->assertRedirect(RouteServiceProvider::HOME);
     }
 
     public function test_profile_information_can_be_updated(): void

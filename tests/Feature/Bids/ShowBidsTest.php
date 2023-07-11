@@ -40,8 +40,8 @@ class ShowBidsTest extends TestCase
             'user_id' => $this->user->id,
             'sellers_id' => $this->seller->id,
             'bid_date' => '2024-07-01',
-            'start_time' => '09:00:00',
-            'end_time' => '10:00:00',
+            'start_time' => '9:00 am',
+            'end_time' => '10:00 am',
             'amount' => 27.25,
         ]);
     }
@@ -50,33 +50,33 @@ class ShowBidsTest extends TestCase
      */
     public function test_show_bids_view(): void
     {
-
-        $response = $this->get("/bids/{$this->seller->id}/2024-07-01/9%3A00 am/10%3A00 am" );
-
-        $response->assertStatus(200);
+        $this
+            ->get(route('bids.show', ['sellers_id' => $this->seller->id, 'bid_date' => '2024-07-01', 'start_time' => '9:00 am', 'end_time' => '10:00 am']))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('Bids/Show')
+                    ->where('errors', [])
+            );
     }
 
-    public function test_404_if_time_not_available(): void
+    public function test_404_if_date_not_available(): void
     {
-        $response = $this->get("/bids/{$this->seller->id}/2024-07-02/9%3A00 am/10%3A00 am" );
-
-        $response->assertStatus(404);
+        $this
+            ->get(route('bids.show', ['sellers_id' => $this->seller->id, 'bid_date' => '2024-07-02', 'start_time' => '9:00 am', 'end_time' => '10:00 am']))
+            ->assertStatus(404);
     }
 
     public function test_show_bid_data(): void
     {
-        $bid = Bids::create([
-            'user_id' => $this->user->id,
-            'sellers_id' => $this->seller->id,
-            'bid_date' => '2024-07-01',
-            'start_time' => '9:00 am',
-            'end_time' => '10:00 am',
-            'amount' => 27.25,
-        ]);
-
-        $response = $this->get("/bids/{$this->seller->id}/2024-07-01/9%3A00 am/10%3A00 am" );
-
-        $response->assertSee($bid->amount);
+        $this
+            ->get(route('bids.show', ['sellers_id' => $this->seller->id, 'bid_date' => '2024-07-01', 'start_time' => '9:00 am', 'end_time' => '10:00 am']))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('Bids/Show')
+                    ->where('bids.0.amount', $this->bid->amount)
+            );
     }
 
 

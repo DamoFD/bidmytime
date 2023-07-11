@@ -5,6 +5,7 @@ namespace Tests\Feature\Sellers;
 use App\Models\Sellers;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class IndexSellersTest extends TestCase
@@ -22,17 +23,15 @@ class IndexSellersTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_show_index_sellers_page(): void
+    public function test_show_index_sellers_page_and_props(): void
     {
-        $response = $this->get('/sellers');
-
-        $response->assertStatus(200);
-    }
-
-    public function test_show_seller_name(): void
-    {
-        $response = $this->get('/sellers');
-
-        $response->assertSee($this->seller->name);
+        $this
+            ->get(route('sellers.index'))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                ->component('Sellers/Index')
+                ->where('sellers.0.name', $this->seller->name)
+            );
     }
 }
