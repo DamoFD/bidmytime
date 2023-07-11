@@ -109,7 +109,7 @@ class BidsController extends Controller
 
         // Extract the day of the week from the date (Monday = 1, Sunday = 7)
         $formatted_date = Carbon::parse($bid_date);
-        $weekday = $formatted_date->dayOfWeek + 1;
+        $weekday = $formatted_date->dayOfWeekIso;
         $availableWeekday = AvailableWeekdays::where('sellers_id', $sellers_id)
             ->where('day_of_week', $weekday)
             ->first();

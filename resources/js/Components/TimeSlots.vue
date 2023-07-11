@@ -81,17 +81,17 @@ const timeUntilBidEnds = (slot) => {
 const attachHighestBidsToTimeSlots = (timeSlots, bids, selectedDate) => {
     return timeSlots.map(slot => {
         // Convert slot start and end times to moment objects for comparison
-        let slotStart = moment(slot.start, 'h:mm a');
-        let slotEnd = moment(slot.end, 'h:mm a');
+        let slotStart = moment(slot.start, 'h:mm a').format('HH:mm:ss');
+        let slotEnd = moment(slot.end, 'h:mm a').format('HH:mm:ss');
 
         // Filter bids that fall into this slot
         let slotBids = bids.filter(bid => {
-            let bidStart = moment(bid.start_time, 'HH:mm:ss');
-            let bidEnd = moment(bid.end_time, 'HH:mm:ss');
+            let bidStart = moment.utc(bid.start_time, 'HH:mm:ss').local().format('HH:mm:ss');
+            let bidEnd = moment.utc(bid.end_time, 'HH:mm:ss').local().format('HH:mm:ss');
             let bidDate = bid.bid_date;
             let slotDate = moment(selectedDate).format('YYYY-MM-DD');
 
-            return bidStart.isSame(slotStart, 'minute') && bidEnd.isSame(slotEnd, 'minute') && bidDate === slotDate;
+            return bidStart === slotStart && bidEnd === slotEnd && bidDate === slotDate;
         });
 
         // Find the highest bid
