@@ -1,5 +1,5 @@
 <script setup>
-import {useForm} from '@inertiajs/vue3'
+import {useForm, usePage} from '@inertiajs/vue3'
 import moment from 'moment';
 
 const emit = defineEmits(['close'])
@@ -23,10 +23,14 @@ const form = useForm({
 })
 
 const submitBid = () => {
-    form.post('/bids', {
-        onSuccess: () => closeModal(),
-    })
+    if (usePage().props.flash.message === null) {
+        form.post('/bids', {
+            onSuccess: () => closeModal(),
+        })
+    }
 }
+
+console.log(usePage().props.flash.message);
 
 const closeModal = () => {
     form.reset()
@@ -60,6 +64,7 @@ const closeModal = () => {
             <p v-if="form.errors.amount" class="text-red-600">{{ form.errors.amount}}</p>
             <p v-if="form.errors.sellers_id" class="text-red-600">{{ form.errors.sellers_id}}</p>
             <p v-if="form.errors.date" class="text-red-600">{{ form.errors.date }}</p>
+            <p v-if="$page.props.flash.message" class="text-red-600">{{ $page.props.flash.message }}</p>
             <div class="mx-2 my-4 flex justify-between">
                 <button class="bg-gradient-to-r from-[#02AABD] to-[#00CDAC] py-2 w-24 rounded-lg cursor-pointer text-white font-nunito font-extrabold" @click="submitBid">Bid</button>
                 <button class="bg-gradient-to-r from-[#D4145A] to-[#FBB03B] py-2 w-24 rounded-lg cursor-pointer text-white font-nunito font-extrabold" @click="closeModal">Cancel</button>

@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'auth.seller' => \App\Http\Middleware\AuthenticateSeller::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
+        'bids.seller' => \App\Http\Middleware\PreventSellerBids::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,

@@ -7,6 +7,7 @@ use App\Models\Bids;
 use App\Models\Sellers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 

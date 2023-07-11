@@ -23,7 +23,8 @@ Route::get('/sellers', [SellersController::class, 'index'])->name('sellers.index
 Route::get('/sellers/{id}', [SellersController::class,'show'])->name('sellers.show');
 
 Route::get('/bids/{sellers_id}/{bid_date}/{start_time}/{end_time}', [BidsController::class, 'show'])->name('bids.show');
-Route::post('/bids', [BidsController::class, 'store'])->name('bids.store');
+Route::post('/bids', [BidsController::class, 'store'])
+    ->middleware(['bids.seller', 'auth'])->name('bids.store');
 
 //Seller Auth
 Route::get('/seller', function () {
