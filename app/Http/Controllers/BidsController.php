@@ -108,8 +108,8 @@ class BidsController extends Controller
         // Check if time slot exists
 
         // Extract the day of the week from the date (Monday = 1, Sunday = 7)
-        $bid_date = Carbon::parse($bid_date);
-        $weekday = $bid_date->dayOfWeek + 1;
+        $formatted_date = Carbon::parse($bid_date);
+        $weekday = $formatted_date->dayOfWeek + 1;
         $availableWeekday = AvailableWeekdays::where('sellers_id', $sellers_id)
             ->where('day_of_week', $weekday)
             ->first();

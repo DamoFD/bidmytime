@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -21,9 +22,14 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered(): void
     {
-        $response = $this->get('/login');
-
-        $response->assertStatus(200);
+        $this
+            ->get(route('login'))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('Auth/Login')
+                    ->where('errors', [])
+            );
     }
 
     public function test_users_can_authenticate_using_the_login_screen(): void
