@@ -4,17 +4,17 @@ import {DatePicker} from 'v-calendar'
 import 'v-calendar/style.css'
 import useDisabledDates from "@/Composables/useDisabledDates.js";
 import useFindWeekdayIdByDate from "@/Composables/useFindWeekdayIdByDate.js";
+import useAvailableDaysOfWeek from "@/Composables/useAvailableDaysOfWeek.js";
 
 const date = ref(new Date())
 const props = defineProps({
     seller: Object
 })
+
 const weekdays = ref(props.seller.available_weekdays)
 
 // Get an array of the available weekdays
-const availableDaysOfWeek = computed(() => {
-    return weekdays.value.map(weekday => weekday.day_of_week)
-})
+const availableDaysOfWeek = useAvailableDaysOfWeek(weekdays)
 
 // List of disabled dates
 const disabledDates = useDisabledDates(availableDaysOfWeek, props.seller.available_exceptions)
